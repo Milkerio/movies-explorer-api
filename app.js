@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://api.mlkr.diplom.nomoredomainsicu.ru', 'https://api.mlkr.diplom.nomoredomainsicu.ru'], credentials: true,
+  origin: ['http://localhost:3000', 'https://localhost:3000', 'http://api.mlkr.diplom.nomoredomainsicu.ru', 'https://api.mlkr.diplom.nomoredomainsicu.ru'], credentials: true,
 }));
 app.use(helmet());
 app.use(limiter);

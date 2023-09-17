@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const userRoutes = require('./user');
 const movieRoutes = require('./movie');
 const auth = require('../middlewares/auth');
-const { createUser, authorize, signout } = require('../controllers/user');
+const { createUser, authorize } = require('../controllers/user');
 const ErrorNotFound = require('../errors/errorNotFound');
 
 router.post('/signup', celebrate({
@@ -20,13 +20,10 @@ router.post('/signin', celebrate({
   }),
 }), authorize);
 
-router.use(auth);
+router.use('/users', auth, userRoutes);
+router.use('/movies', auth, movieRoutes);
 
-router.use('/users', userRoutes);
-router.use('/movies', movieRoutes);
-router.post('/signout', signout);
-
-router.use('*', (req, res, next) => {
+router.use('*', auth, (req, res, next) => {
   next(new ErrorNotFound('Данного пути не существует.'));
 });
 

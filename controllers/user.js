@@ -45,20 +45,11 @@ module.exports.authorize = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'secret',
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        sameSite: true,
-        maxAge: 3600000 * 24 * 7,
-      });
       res.send({ token });
     })
     .catch(() => {
       next(new ErrorUnauthorized('Вы не авторизовались. Проверьте почту или пароль.'));
     });
-};
-module.exports.signout = (req, res) => {
-  const { token } = res.cookie;
-  res.clearCookie(token);
 };
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)

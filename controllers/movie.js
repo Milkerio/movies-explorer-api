@@ -6,11 +6,11 @@ const Movie = require('../models/movie');
 module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
+    .populate(['owner'])
     .then((movies) => res.send(movies))
     .catch(next);
 };
 module.exports.createMovie = (req, res, next) => {
-  const owner = req.user._id;
   const {
     country,
     director,
@@ -33,13 +33,15 @@ module.exports.createMovie = (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
-    owner,
+    owner: req.user,
     movieId,
     nameRU,
     nameEN,
   })
     .then((movie) => {
-      res.send(movie);
+      movie.populate(['owner'])
+        .then(() => res.send(movie))
+        .catch(next);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

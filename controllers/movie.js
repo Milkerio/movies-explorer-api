@@ -53,13 +53,17 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params._id)
     .orFail(() => new ErrorNotFound('Фильм с указанным id не найден.'))
     .then((movie) => {
-      if (req.user._id === movie.owner.toString()) {
-        Movie.deleteOne(movie)
-          .then(() => res.send(movie))
-          .catch(next);
-      } else {
-        throw new ErrorForbidden('Вы не можете удалять чужие фильмы.');
+      if (`${movie.owner}` !== req.user._id) {
+        throw new ErrorForbidden('Отказано в доступе');
       }
+      return movie.deleteOne()
+        .then(() => res.status(200).send(movie));
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new ErrorBadRequest('Неверный id фильма'));
+        return;
+      }
+      next(err);
+    });
 };

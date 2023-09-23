@@ -17,7 +17,7 @@ mongoose.connect(DB_ADRESS);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: ['https://mlkr.diplom.nomoredomainsrocks.ru', 'http://mlkr.diplom.nomoredomainsrocks.ru'] }));
+app.use(cors({ origin: ['https://mlkr.diplom.nomoredomainsrocks.ru', 'http://mlkr.diplom.nomoredomainsrocks.ru', 'http://localhost:3000', 'https://localhost:3000'] }));
 app.use(helmet());
 app.use(limiter);
 app.use(requestLogger);
